@@ -1,0 +1,194 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<%- include('../blocks/header', {bot, user, path}) %>
+<div class="container">
+	<div class="row justify-content-md-center">
+		<h2 style="color: #fff;">Üye Listesi</h2>
+	</div>
+	<script type="text/javascript">
+		let kur = {
+				"01": "Ocak",
+				"02": "Şubat",
+				"03": "Mart",
+				"04": "Nisan",
+				"05": "Mayıs",
+				"06": "Haziran",
+				"07": "Temmuz",
+				"08": "Ağustos",
+				"09": "Eylül",
+				"10": "Ekim",
+				"11": "Kasım",
+				"12": "Aralık"
+		}
+	</script>
+	<div class="row" style="color: #fff; margin-top: 25px;">
+		<div class="col-6">
+			<form class="form-inline">
+				<label class="mr-sm-2" for="sort-by">Sıralama</label>
+				<select class="custom-select mb-2 mr-sm-2 mb-sm-0 form-control-sm" id="sort-by">
+					<option value="displayName">Gözüken İsim</option>
+					<option value="id">ID</option>
+				</select>
+				<label class="sr-only" for="display-name-search">Ara</label>
+				<div class="input-group">
+					<div class="input-group-addon fa fa-search" style="margin: 7px;"></div>
+					<input type="text" class="form-control form-control-sm" id="display-name-search" placeholder="Ara">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<table class="table table-hover table-bordered" style="background-color: #525656;">
+	<thead class="thead-default">
+		<tr style="color:white">
+			<th>Gözüken İsim:</th>
+			<th>Tag:</th>
+			<th>Katılım Tarihi:</th>
+			<th>Roller:</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+
+<script type="text/javascript">
+	var guildID = "<%= guild.id %>";
+	var pages = {
+		total: null,
+		current: null,
+		elements: null,
+		limit: 10000,
+		sortby: null,
+		inverted: false,
+		filter: null
+	};
+
+	function hexToRgb(hex) {
+			var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+			return result ? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16)
+			} : null;
+	}
+	
+	function getMembers(start, callback) {
+		$.getJSON(`/dashboard/${guildID}/members/list?start=${start}&limit=${pages.limit}&sortby=${pages.sortby}&filter=${pages.filter}`, function(response) {
+			pages.total = response.pageof;
+			pages.current = response.page;
+			pages.elements = response.total;
+			callback(response);
+		});
+	}
+	
+	function updateTable(members) {
+		$("table tbody").empty();
+		for(var i = 0; i < members.length; i++) {
+			member = members[i];
+			var color = member.highestRole.hexColor === "#000000" ? '#FFFFFF' : member.highestRole.hexColor;
+			var roles = member.roles.filter(r=>r.name !== "@everyone").map(r=> {
+				var rc = r.hexColor === "#000000" ? {r:255,g:255,b:255} : hexToRgb(r.hexColor);
+				return `<span class="roleBox" style="color: rgb(${rc.r}, ${rc.g}, ${rc.b}); background-color: #000000;">${r.name}</span>`;
+			}).join(" ");
+			var thishtml = snippet
+				.replace(/\{color\}/g, color)
+				.replace("{displayName}", `<a style='color: ${color};'>${member.displayName}</a>`)
+				.replace("{status}", member.status)
+				.replace("{tag}", member.tag)
+				.replace("{joined}", `${moment(member.joinedAt).format('DD')} ${kur[moment(member.joinedAt).format('MM')]} ${moment(member.joinedAt).format('YYYY h:mm:ss')}`)
+				.replace("{roles}", roles || 'Bulunmuyor');
+			if (member.bot) {
+				thishtml = thishtml.replace("{botimg}", ' <img src="/public/bot.png">');
+			} else { 
+				thishtml = thishtml.replace("{botimg}", '');
+			}
+			$('table > tbody').append(thishtml);
+		};
+	}
+	
+	function changePage(page) {
+		var start = page * pages.limit;
+		pages.current = page;
+		getMembers(start, function(data) {
+			updateTable(data.members);
+		})
+		console.log("Changing To Page: "+page)
+	}
+	
+	function drawPagination() {
+		$('.pagination').empty();
+		$('.pagination').append('<li class="page-item active"><a class="page-link" href="#" data-pagenum="1">1</a></li>')
+		for(var i = 1; i < pages.total; i++) {
+			var strItem = '<li class="page-item"><a class="page-link" href="#" data-pagenum="'+(i+1)+'">'+(i+1)+'</a></li>';
+			$('.pagination').append(strItem);
+		}
+		$('.page-link').click(function(e) {
+			e.preventDefault();
+			$( this ).parent().addClass('active');
+			$('.pagination').find('.active').removeClass('active');
+			changePage($(this).attr('data-pagenum'));
+			return false;
+		});
+	}
+
+	var snippet = `
+			<tr>
+				<td style="color:{color}"><span class="status {status}"></span> {displayName}{botimg}</td>
+				<td style="color:{color}">{tag}</td>
+				<td style="color:{color}">{joined}</td>
+				<td>{roles}</td>
+			</tr>
+			`;
+	var roleSnippet = '<span style="color:{color}">{name}</span>';
+
+	$(document).ready( function () {
+		getMembers(0, function(data) {
+			pages.current = data.page;
+			updateTable(data.members);
+			console.log(data);
+			drawPagination();
+		});
+	});
+	
+	$( "#show-members" ).change(function() {
+		console.log("Changing display limit to: " + this.value)
+		pages.limit = 10000;
+		getMembers(0, function(data) {
+			updateTable(data.members);
+			console.log(data);
+			drawPagination();
+		});
+	});
+	
+	$( "#sort-by" ).change(function() {
+		console.log("Sorting By: " + this.value)
+		pages.sortby = this.value;
+		getMembers(pages.current, function(data) {
+			updateTable(data.members);
+			console.log(data);
+			drawPagination();
+		});
+	});
+
+	var typingTimer;								//timer identifier
+	var doneTypingInterval = 1000;	//time in ms (5 seconds)
+
+	$('#display-name-search').keyup(function(){
+		clearTimeout(typingTimer);
+		if ($('#display-name-search').val()) {
+			pages.filter = $('#display-name-search').val();
+		} else {
+			pages.filter = null;
+		}
+		typingTimer = setTimeout(doneTyping, doneTypingInterval);
+	});
+
+	function doneTyping () {
+		getMembers(0, function(data) {
+			updateTable(data.members);
+			drawPagination();
+		});
+	}
+</script>
+
+<% include ../blocks/footer %>

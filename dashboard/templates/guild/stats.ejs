@@ -1,0 +1,94 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<%- include('../blocks/header', {bot, user, path}) %>
+<div class="container">
+	<div class="row justify-content-md-center">
+		<h2 style="color: #fff;">Sunucu İstatistikleri</h2>
+	</div>
+	<div class="row">
+		<div class="col col-4">
+			<%- include('../blocks/guild-card', {guild}) %>
+		</div>
+		<div class="col">
+			<div class="card" style="background-color: #525656;">
+				<%- include('../blocks/guild-nav', {active: "stats", guild}) %>
+				<%
+				let region = {
+					"us-central": "Amerika",
+					"us-east": "Doğu Amerika",
+					"us-south": "Güney Amerika",
+					"us-west": "Batı Amerika",
+					"eu-west": "Batı Avrupa",
+					"eu-central": `Avrupa`,
+					"singapore": "Singapur",
+					"london": "Londra",
+					"japan": "Japonya",
+					"russia": "Rusya",
+					"hongkong": "Hong Kong",
+					"brazil": "Brezilya",
+					"singapore": "Singapur",
+					"sydney": "Sidney",
+					"southafrica": "Güney Afrika"
+				} %>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-cog" aria-hidden="true"></i> Sunucu Adı:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.name %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-server" aria-hidden="true"></i> Sunucu Konumu:</div>
+					<div class="col-5 text-nowrap"><strong><%= region[guild.region] %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-user" aria-hidden="true"></i> Sunucu Sahibi:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.owner.user.tag %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i> Sunucu ID:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.id %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-tasks" aria-hidden="true"></i> Sunucu Oluşturulma Tarihi:</div>
+					<div class="col-5 text-nowrap" id="guildCreate"><strong><%= guild.createdTimestamp %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Kullanıcı Sayısı:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.members.filter(m => !m.user.bot).size %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-android" aria-hidden="true"></i> Bot Sayısı:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.members.filter(m => m.user.bot).size %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i> Kanal Sayısı:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.channels.size %></strong></div>
+				</div>
+				<div class="row justify-content-md-center" style="color: #ffffff; font-size: 20px;">
+					<div class="col-5 text-nowrap"><i class="fa fa-fw fa-user-circle-o" aria-hidden="true"></i> Rol Sayısı:</div>
+					<div class="col-5 text-nowrap"><strong><%= guild.roles.size %></strong></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<% include ../blocks/guild-modals %>
+<script type="text/javascript">
+	let kur = {
+			"01": "Ocak",
+			"02": "Şubat",
+			"03": "Mart",
+			"04": "Nisan",
+			"05": "Mayıs",
+			"06": "Haziran",
+			"07": "Temmuz",
+			"08": "Ağustos",
+			"09": "Eylül",
+			"10": "Ekim",
+			"11": "Kasım",
+			"12": "Aralık"
+	}
+	var ts = parseInt($('#guildCreate').text());
+	$('#guildCreate').html(`<strong>${moment(ts).format('DD')} ${kur[moment(ts).format('MM')]} ${moment(ts).format('YYYY h:mm:ss')}</strong>`);
+</script>
+
+<% include ../blocks/footer %>

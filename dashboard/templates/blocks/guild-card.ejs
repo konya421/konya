@@ -1,0 +1,49 @@
+<div class="card" style="width: 20rem; background-color: #525656;">
+	<% if (guild.icon) { %>
+		<img class="d-inline-block align-top rounded-circle" style="width: 100%;" src="<%= `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256` %>" alt="">
+	<% } else { %>
+		<canvas class="d-inline-block align-top rounded-circle" style="background-color: #7289da" id="<%= guild.name.split(' ').join('').replace(`'`, ``) %>" width="256px" height="320px"></canvas>
+		<script>
+			function draw() {
+				const ctx = document.getElementById("<%= guild.name.split(' ').join('').replace(`'`, ``) %>").getContext('2d');
+				ctx.font = '95px Arial';
+				ctx.textAlign = "center";
+				ctx.fillStyle = "white";
+				ctx.fillText("<%= guild.name.split(' ').map(v => v[0]).join('') %>", 125, 185);
+			};
+			draw();
+		</script>
+	<% } %>
+	<div class="card-block">
+		<h4 class="card-title" style="color: #fff;"><br><center>
+			<%= guild.name %>
+		</h4></center><br>
+		<ul class="list-group list-group-flush" style="width: 100%; border: 0px;">
+			<li class="list-group-item" style="width: 100%; background-color: #525656; color: #ffffff; border: 0px;">
+				<strong>Sunucu Sahibi</strong>: 
+				<i class="fa fa-fw fa-user" aria-hidden="true"></i>
+				<a style='color: #ffffff'><%= `${guild.owner.user.tag}` %></a>
+			</li>
+			<li class="list-group-item" style="background-color: #525656; color: #ffffff; border: 0px;">
+				<strong>Kullanıcı Sayısı</strong>:
+				<i class="fa fa-fw fa-users" aria-hidden="true"></i>
+				<%= `${guild.memberCount - guild.members.filter(m => m.user.bot).size}` %>
+				<i class="fa fa-fw fa-android" aria-hidden="true"></i>
+				<%= `${guild.members.filter(m => m.user.bot).size}` %> Bot
+			</li>
+			<li class="list-group-item" style="background-color: #525656; color: #ffffff; border: 0px;">
+				<strong>Rol Sayısı</strong>:
+				<i class="fa fa-fw fa-users" aria-hidden="true"></i>
+				<%= guild.roles.size %>
+			</li>
+			<li class="list-group-item" style="background-color: #525656; color: #ffffff; border: 0px;">
+				<strong>Kanal Sayısı</strong>:
+				<i class="fa fa-fw fa-hashtag" aria-hidden="true"></i>
+				<%= `${guild.channels.size}`%>
+			</li>
+		</ul>
+		<div align="right"><a class="btn btn-danger" data-toggle="modal" data-target="#serverLeaveModal" role="button"><font color="white">Botu Sunucudan At
+			<i class="fa fa-fw fa-sign-out" aria-hidden="true"></i></font>
+		</a></div>
+	</div>
+</div>

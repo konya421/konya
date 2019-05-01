@@ -1,0 +1,80 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<%- include('blocks/header', {bot, user, path}) %>
+
+<h1 align="center" style="color:#ffffff">
+       Tüm Komutlar
+    </h1>
+  
+<% const help = {};
+bot.commands.forEach((command) => {
+  const cat = command.conf.kategori;
+  if (!help.hasOwnProperty(cat)) help[cat] = [];
+  help[cat].push(command);
+});
+%>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+		
+	<% for (const category in help) { %>
+		<br>
+		<div class="row justify-content-md-center">
+        <% var k = category
+      .replace("eğlence", "eğlence komutları")
+      .replace("kullanıcı", "kullanıcı komutları")
+      .replace("sunucu", "sunucu komutları")
+      .replace("profil", "profil sistemi")
+      .replace("moderasyon", "moderasyon komutları")
+      .replace("bot", "bot komutları")
+      .replace("iletisim", "bot iletişim - destek komutları")
+      .replace("yapımcı", "bot yapımcısı komutları")
+      .replace("oyun", "oyun komutları")
+      .replace("ayarlar", "ayarlar")
+      .replace("özel", "özel komut sistemi")
+      .replace("genel", "genel komutlar")
+      .replace("efekt", "çerçeve ve efekt komutları")
+      .replace("premium", "premium komutlar (Ücretsiz)")
+      .replace("lvl", "Seviye Sistemi")
+        %>
+			<h3 style="color: #ffffff;"><%= k.charAt(0).toUpperCase() + k.slice(1) %></h3>
+		</div>
+		<br>
+		<div class="card-columns" style="background-color:#525656; padding: 20px; border-radius: 40px;">
+			<% for (const command of help[category]) { %>
+				<div class="card" style="background-color: #383838; margin: 3px; border-radius: 40px;">
+					<h3 class="card-header" style="color: #383838;"><center><a href="#" data-toggle="modal" data-target="#<%= `${command.help.name}` %>Modal" style="text-decoration: none;"><%= command.help.name %></a></center></h3>
+					<div style="color:white" class="card-block">
+						<p class="card-text"><center><%= command.help.description %></center></p>
+						<h6 class="card-subtitle text-muted" align="right"><center>Gerekli Yetki: <%= command.conf.permLevel.toString().replace('0', 'Yetki gerekmiyor').replace('1', 'Mesajları Yönet').replace('2', 'Üyeleri At').replace('3', 'Üyeleri Yasakla').replace('4', 'Yönetici').replace('5', 'Bot Sahibi') %></center><br /></h6>
+					</div>
+				</div>
+        <div id="<%= `${command.help.name}` %>Modal" class="modal fade" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header btn-info disabled" style="background-color: #525656; border: 0px;">
+								<h4 class="modal-title""><%= command.help.name %></h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+              <div class="modal-body" style="background-color: #F7F7F7; border: 0px;">
+                <% let x;
+                if (command.conf.enabled === true) {
+                  x = "Evet! Gerekli yetkiye sahip herkes kullanabilir."
+                }
+                if (command.conf.enabled === false) {
+                  x = "Hayır! Bu komut henüz yapım aşamasında."
+                }
+                %>
+                  <p><b>Örnek Kullanım:</b> <%= command.help.usage %></p>
+                  <p><b>Gerekli Yetki:</b> <%= command.conf.permLevel.toString().replace('0', 'Yetki gerekmiyor').replace('1', 'Mesajları Yönet').replace('2', 'Üyeleri At').replace('3', 'Üyeleri Yasakla').replace('4', 'Yönetici').replace('5', 'Bot Sahibi') %></p>
+                  <p><b>Komutun Diğer Adları:</b> <%= `${command.conf.aliases.join(', ') || 'Bulunmuyor'}` %></p>
+                  <p><b>Komut Kullanbilir Durumda Mı?</b> <%= x %></p>
+              </div>
+              <div class="modal-footer" style="background-color: #F7F7F7; border: 0px;"><button type="button" class="btn btn-outline-danger" data-dismiss="modal">Kapat</button></div>
+						</div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+<% include ./blocks/footer %>
