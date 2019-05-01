@@ -1,0 +1,2 @@
+# konyabott
+altyapı
