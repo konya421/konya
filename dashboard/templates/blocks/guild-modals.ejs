@@ -1,0 +1,45 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div class="modal fade" id="serverLeaveModal" tabindex="-1" role="dialog" aria-labelledby="serverLeaveModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="background-color: #525656; color: #ffffff;">
+			<div class="modal-header" style="border: 0px;">
+				<h5 class="modal-title" id="serverLeaveModalLabel" style="background-color: #525656; color: #ffffff;">Emin misin?</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="background-color: #fff; color: #000;">
+				<p>
+					Gerçekten <%= bot.user.username %> botunu sunucundan atmak istiyor musun?
+				</p>
+			</div>
+			<div class="modal-footer" style="background-color: #ffffff; color: #000; border: 0px;">
+				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">İptal</button>
+				<a class="btn btn-outline-danger" href="/dashboard/<%= guild.id %>/leave" role="button">Evet At</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="settingsResetModal" tabindex="-1" role="dialog" aria-labelledby="settingsResetModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="background-color: #525656; color: #ffffff;">
+			<div class="modal-header" style="border: 0px;">
+				<h5 class="modal-title" id="settingsResetModalLabel">Emin misin?</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="background-color: #fff; color: #000;">
+				<p>
+					Gerçekten ayarları sıfırlamak istiyor musun?
+				</p>
+			</div>
+			<div class="modal-footer" style="background-color: #ffffff; color: #000; border: 0px;">
+				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">İptal</button>
+				<a class="btn btn-outline-danger" href="/dashboard/<%= guild.id %>/reset" role="button">Evet Sıfırla</a>
+			</div>
+		</div>
+	</div>
+</div>

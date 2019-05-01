@@ -1,0 +1,71 @@
+{
+  "//1": "describes your app and its dependencies",
+  "//2": "https://docs.npmjs.com/files/package.json",
+  "//3": "updating this file will download and update your packages",
+  "name": "hello-express",
+  "version": "0.0.1",
+  "description": "A simple Node app built on Express, instantly up and running.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cheerio": "^1.0.0-rc.3",
+    "cleverbot.io": "^1.0.4",
+    "common-tags": "^1.8.0",
+    "cpu-stat": "^2.0.1",
+    "db-system": "^0.0.34",
+    "dblapi.js": "^2.3.0",
+    "discord.js": "^11.4.2",
+    "ejs": "^2.6.1",
+    "els": "^0.1.0-alpha",
+    "express": "^4.16.4",
+    "express-session": "^1.16.1",
+    "figlet": "^1.2.1",
+    "fortnitetracker-7days-stats": "^3.1.2",
+    "gifencoder": "^2.0.1",
+    "hastebin-gen": "^2.0.4",
+    "helmet": "^3.16.0",
+    "jimp": "^0.6.4",
+    "level-session-store": "^2.2.0",
+    "marked": "^0.6.2",
+    "math-expression-evaluator": "^1.2.17",
+    "moment": "^2.24.0",
+    "moment-duration-format": "^2.2.2",
+    "node-google-translate-skidz": "^1.1.2",
+    "node-opus": "^0.3.1",
+    "node-superfetch": "^0.1.9",
+    "passport": "^0.4.0",
+    "passport-discord": "^0.1.3",
+    "pokedex-api": "^1.1.2",
+    "quick.db": "^7.0.0-b22",
+    "request": "^2.88.0",
+    "simple-youtube-api": "^5.1.1",
+    "speedtest-net": "^1.5.1",
+    "useful-package": "^0.0.64",
+    "useful-tools": "^0.2.6",
+    "ytdl-core": "^0.29.1"
+  },
+  "engines": {
+    "node": "9.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/An-Idiots-Guide/guidebot.git"
+  },
+  "author": "Evelyne Lachance <eslachance@gmail.com> (http://evie.codes)",
+  "contributors": [
+    "York (http://anidiots.guide)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/An-Idiots-Guide/guidebot/issues"
+  },
+  "homepage": "https://github.com/An-Idiots-Guide/guidebot#readme",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
