@@ -29,7 +29,7 @@
     "helmet": "^3.16.0",
     "jimp": "^0.6.4",
     "level-session-store": "^2.2.0",
-    "marked": "^0.6.2",
+    "marked": "^1.1.1",
     "math-expression-evaluator": "^1.2.17",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.2.2",
